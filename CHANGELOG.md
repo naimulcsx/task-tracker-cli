@@ -1,5 +1,11 @@
 # @naimulcsx/task-tracker-cli
 
+## 0.2.0
+
+### Minor Changes
+
+- d039ade: Fixed CLI command so that it can be accessed using `task-tracker` globally
+
 ## 0.1.0
 
 ### Minor Changes
