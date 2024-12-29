@@ -1,13 +1,15 @@
 {
   "name": "@naimulcsx/task-tracker-cli",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "CLI app to track your tasks and manage your to-do list",
   "type": "module",
   "scripts": {
     "check-exports": "attw --pack .",
     "check-format": "prettier --check .",
     "ci": "npm run build && npm run check-format && npm run check-exports",
-    "build": "tsup"
+    "build": "tsup",
+    "local-release": "changeset version && changeset publish",
+    "prepublishOnly": "npm run ci"
   },
   "keywords": [
     "task",
@@ -30,6 +32,7 @@
   "license": "MIT",
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.2",
+    "@changesets/cli": "^2.27.11",
     "@types/node": "^22.10.2",
     "prettier": "^3.4.2",
     "tsup": "^8.3.5",
