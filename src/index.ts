@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import { TaskManager } from "./TaskManager";
 import { FileStorageAdapter } from "./adapters/FileStorageAdapter";
