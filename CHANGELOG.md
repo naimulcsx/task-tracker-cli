@@ -1,5 +1,11 @@
 # @naimulcsx/task-tracker-cli
 
+## 0.3.0
+
+### Minor Changes
+
+- 9b592e2: Fix wrong reference to cjs build in package.json bin property
+
 ## 0.2.0
 
 ### Minor Changes
