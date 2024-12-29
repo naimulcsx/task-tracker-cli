@@ -1,5 +1,11 @@
 # @naimulcsx/task-tracker-cli
 
+## 0.4.0
+
+### Minor Changes
+
+- 6858628: Added shebang so that the command runs correctly
+
 ## 0.3.0
 
 ### Minor Changes
