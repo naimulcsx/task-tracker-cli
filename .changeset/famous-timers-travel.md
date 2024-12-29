@@ -2,4 +2,4 @@
 "@naimulcsx/task-tracker-cli": minor
 ---
 
-fix wrong refernce to esm build
+Fix wrong reference to cjs build in package.json bin property

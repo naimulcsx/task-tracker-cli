@@ -43,7 +43,7 @@
   },
   "main": "./dist/index.js",
   "bin": {
-    "task-tracker": "./dist/index.js"
+    "task-tracker": "./dist/index.cjs"
   },
   "exports": {
     "./package.json": "./package.json",
