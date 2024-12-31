@@ -1,5 +1,11 @@
 # @naimulcsx/task-tracker-cli
 
+## 0.6.0
+
+### Minor Changes
+
+- db31e5e: remove cjs, package is now esm only
+
 ## 0.5.0
 
 ### Minor Changes
