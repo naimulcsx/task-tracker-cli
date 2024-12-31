@@ -1,5 +1,11 @@
 # @naimulcsx/task-tracker-cli
 
+## 1.0.0
+
+### Major Changes
+
+- 1c1bcff: switched to esm only package
+
 ## 0.6.0
 
 ### Minor Changes

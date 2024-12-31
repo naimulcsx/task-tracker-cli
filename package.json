@@ -1,6 +1,6 @@
 {
   "name": "@naimulcsx/task-tracker-cli",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "CLI app to track your tasks and manage your to-do list",
   "type": "module",
   "scripts": {
