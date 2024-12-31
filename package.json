@@ -4,7 +4,7 @@
   "description": "CLI app to track your tasks and manage your to-do list",
   "type": "module",
   "scripts": {
-    "check-exports": "attw --pack .",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "check-format": "prettier --check .",
     "ci": "npm run build && npm run check-format && npm run check-exports",
     "build": "tsup",
@@ -42,14 +42,12 @@
     "commander": "^12.1.0",
     "lowdb": "^7.0.1"
   },
-  "main": "./dist/index.js",
   "bin": {
     "task-tracker": "./dist/index.js"
   },
+  "main": "./dist/index.js",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": "./dist/index.js"
-    }
+    ".": "./dist/index.js"
   }
 }
