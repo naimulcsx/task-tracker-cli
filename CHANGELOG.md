@@ -1,5 +1,11 @@
 # @naimulcsx/task-tracker-cli
 
+## 0.5.0
+
+### Minor Changes
+
+- 60b24d9: switch to lowdb for the file storage adapter
+
 ## 0.4.0
 
 ### Minor Changes
