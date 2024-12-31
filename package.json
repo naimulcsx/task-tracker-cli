@@ -44,13 +44,6 @@
   },
   "main": "./dist/index.js",
   "bin": {
-    "task-tracker": "./dist/index.cjs"
-  },
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": "./dist/index.js",
-      "default": "./dist/index.cjs"
-    }
+    "task-tracker": "./dist/index.js"
   }
 }
