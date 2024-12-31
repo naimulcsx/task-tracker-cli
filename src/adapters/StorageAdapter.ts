@@ -5,7 +5,7 @@ export enum TaskStatus {
 }
 
 export interface Task {
-  id: string;
+  id: string | number;
   title: string;
   status: TaskStatus;
   createdAt: Date;
@@ -13,10 +13,9 @@ export interface Task {
 }
 
 export interface StorageAdapter {
-  createTask(task: Task): Promise<Task>;
+  createTask(task: Omit<Task, "id">): Promise<Task>;
   getTask(id: string): Promise<Task | null>;
   getAllTasks(): Promise<Task[]>;
   updateTask(id: string, task: Partial<Task>): Promise<Task>;
   deleteTask(id: string): Promise<boolean>;
-  getId(): string;
 }

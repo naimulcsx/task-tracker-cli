@@ -8,8 +8,7 @@ export class TaskManager {
   constructor(private storage: StorageAdapter) {}
 
   async addTask(title: string): Promise<Task> {
-    const newTask: Task = {
-      id: this.storage.getId(),
+    const newTask = {
       title,
       status: TaskStatus.TODO,
       createdAt: new Date(),

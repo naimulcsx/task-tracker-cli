@@ -1,84 +1,81 @@
 import { type StorageAdapter, type Task } from "./StorageAdapter";
-import fs from "fs/promises";
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
 import path from "path";
 import crypto from "crypto";
 
+type Schema = {
+  tasks: Task[];
+  totalTasks: number;
+};
+
 export class FileStorageAdapter implements StorageAdapter {
-  private filePath: string;
+  private db: Low<Schema>;
 
   constructor(filename: string) {
-    this.filePath = path.join(process.cwd(), filename);
+    const filePath = path.join(process.cwd(), filename);
+    const adapter = new JSONFile<Schema>(filePath);
+    this.db = new Low(adapter, { tasks: [], totalTasks: 0 });
   }
 
-  private async readFile(): Promise<Task[]> {
-    try {
-      const data = await fs.readFile(this.filePath, "utf-8");
-      const tasks = JSON.parse(data);
-      return tasks.map((task: any) => ({
-        ...task,
-        createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
-      }));
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-        return [];
-      }
-      throw error;
-    }
+  private async ensureDb(): Promise<void> {
+    await this.db.read();
+    this.db.data = this.db.data || { tasks: [], totalTasks: 0 };
   }
 
-  private async writeFile(tasks: Task[]): Promise<void> {
-    await fs.writeFile(this.filePath, JSON.stringify(tasks, null, 2));
-  }
+  async createTask(task: Omit<Task, "id">): Promise<Task> {
+    await this.ensureDb();
+    const newTask = {
+      ...task,
+      id: (this.db.data.totalTasks + 1).toString(),
+    };
 
-  async createTask(task: Task): Promise<Task> {
-    const tasks = await this.readFile();
-    tasks.push(task);
-    await this.writeFile(tasks);
-    return task;
+    this.db.data.tasks.push(newTask);
+    this.db.data.totalTasks++;
+    await this.db.write();
+    return newTask;
   }
 
   async getTask(id: string): Promise<Task | null> {
-    const tasks = await this.readFile();
-    return tasks.find((task) => task.id === id) || null;
+    await this.ensureDb();
+    return this.db.data.tasks.find((task) => task.id === id) || null;
   }
 
   async getAllTasks(): Promise<Task[]> {
-    return await this.readFile();
+    await this.ensureDb();
+    return this.db.data.tasks;
   }
 
   async updateTask(id: string, updates: Partial<Task>): Promise<Task> {
-    const tasks = await this.readFile();
-    const index = tasks.findIndex((task) => task.id === id);
+    await this.ensureDb();
+    const index = this.db.data.tasks.findIndex((task) => task.id === id);
 
     if (index === -1) {
       throw new Error("Task not found");
     }
 
     const updatedTask = {
-      ...(tasks[index] as Task), // Get the existing task first
+      ...this.db.data.tasks[index]!,
       updatedAt: new Date(),
-      ...updates, // Apply updates last
+      ...updates,
     };
 
-    tasks[index] = updatedTask;
-    await this.writeFile(tasks);
-    return updatedTask as Task;
+    this.db.data.tasks[index] = updatedTask;
+    await this.db.write();
+    return updatedTask;
   }
 
   async deleteTask(id: string): Promise<boolean> {
-    const tasks = await this.readFile();
-    const filteredTasks = tasks.filter((task) => task.id !== id);
+    await this.ensureDb();
+    const initialLength = this.db.data.tasks.length;
+    this.db.data.tasks = this.db.data.tasks.filter((task) => task.id !== id);
 
-    if (filteredTasks.length === tasks.length) {
+    if (this.db.data.tasks.length === initialLength) {
       return false;
     }
 
-    await this.writeFile(filteredTasks);
+    this.db.data.totalTasks--;
+    await this.db.write();
     return true;
-  }
-
-  getId(): string {
-    return crypto.randomUUID();
   }
 }
